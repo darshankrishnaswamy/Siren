@@ -1,6 +1,7 @@
 import csv
 import math
-import os
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
 from pathlib import Path
 import librosa
 import numpy as np
@@ -19,7 +20,7 @@ file = open("./ECS/esc50.csv");
 data = csv.reader(file, delimiter=",")
 next(data);
 
-x = np.zeros((0, 20, 431))
+x = np.zeros((0, 513, 27))
 usefulClasses = [0, 1, 2, 3, 5, 6, 12, 19, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]
 map = [0, 1, 2, 3, 0, 4, 5, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
        0, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
@@ -35,10 +36,14 @@ directory = Path(direction)
 count = 0;
 
 for row in data:
-    # audio, sampleRate = librosa.load(directory / row[0], sr=44100)
+    audio, sampleRate = librosa.load(directory / row[0], sr=44100)
 
-    # mfccs = mfccs.reshape((1, 20, 431))
-    # x = np.append(x, mfccs, axis=0)
+    fig, ax = plt.subplots()
+    spectrogram, freqs, times, im = ax.specgram(audio, NFFT=4096, Fs=sampleRate,
+                                                window=mlab.window_hanning,
+                                                noverlap=4096 // 2)
+    spectrogram = spectrogram[::4, ::4]
+    spectrogram = spectrogram.reshape((1, 513, 27))
 
     x = np.append(x, spectrogram, axis=0)
     if int(row[2]) in usefulClasses:
