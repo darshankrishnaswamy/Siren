@@ -38,7 +38,7 @@ def reset():
     input_shape = (20, 431, 1)
     #
     model.add(Conv2D(64, kernel_size=filter_size, activation="relu", input_shape=input_shape))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.7))
     model.add(Conv2D(24, kernel_size=filter_size, activation="relu"))
     model.add(Dropout(0.5))
     # model.add(Conv2D(12, kernel_size=filter_size, activation="relu"))
