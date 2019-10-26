@@ -67,9 +67,9 @@ np.random.shuffle(combined)
 images = np.copy(combined[:, :images.size // len(images)]).reshape(images.shape)
 vectors = np.copy(combined[:, images.size // len(images):]).reshape(vectors.shape)
 
-images -= images.min()
-images = images / images.max()
+# images -= images.min()
 images -= images.mean()
+images = images / np.std(images)
 
 XT = images.reshape((images.shape[0], images.shape[1], images.shape[2], 1))
 YT = to_categorical(vectors)
