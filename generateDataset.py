@@ -34,14 +34,14 @@ direction = "./ECS/audio/44100"
 directory = Path(direction)
 
 count = 0;
+fileCount = 0;
 
 for row in data:
     audio, sampleRate = librosa.load(directory / row[0], sr=44100)
 
-    fig, ax = plt.subplots()
-    spectrogram, freqs, times, im = ax.specgram(audio, NFFT=4096, Fs=sampleRate,
-                                                window=mlab.window_hanning,
-                                                noverlap=4096 // 2)
+    spectrogram, freqs, times = mlab.specgram(audio, NFFT=4096, Fs=sampleRate,
+                                              window=mlab.window_hanning,
+                                              noverlap=4096 // 2)
     spectrogram = spectrogram[::4, ::4]
     spectrogram = spectrogram.reshape((1, 513, 27))
 
@@ -56,20 +56,40 @@ for row in data:
 
     count += 1
     print(count, end="\r")
+    if x.shape[0] >= 400:
+        with open("./data/vectorsX" + str(fileCount) + ".csv", "wb") as file:
+            np.savetxt(file, x.reshape(x.shape[0], x.shape[1] * x.shape[2]), delimiter=",")
+        with open("./data/vectorsY" + str(fileCount) + ".csv", "wb") as file:
+            np.savetxt(file, y, delimiter=",")
+        x = np.zeros((0, 513, 27))
+        y = np.zeros(0)
+        fileCount += 1
 
 file.close();
 
-for i in range(useful.size()):
-    spectrogram = useful[i]
-    randomNoises = np.random.choice(noise.size(), 29, replace=False)
-    for i in randomNoises:
-        x.append(np.add(spectrogram, noise[i]))
-        y.append(usefulC[i])
+count = 0
 
-with open("vectorsXDefault.csv", "wb") as file:
+for i in range(len(useful)):
+    spectrogram = useful[i]
+    randomNoises = np.random.choice(len(noise), 29, replace=False)
+    for j in randomNoises:
+        x = np.append(x, np.add(spectrogram, noise[j]), axis=0)
+        y = np.append(y, usefulC[i])
+        if x.shape[0] >= 400:
+            with open("./data/vectorsX" + str(fileCount) + ".csv", "wb") as file:
+                np.savetxt(file, x.reshape(x.shape[0], x.shape[1] * x.shape[2]), delimiter=",")
+            with open("./data/vectorsY" + str(fileCount) + ".csv", "wb") as file:
+                np.savetxt(file, y, delimiter=",")
+            x = np.zeros((0, 513, 27))
+            y = np.zeros(0)
+            fileCount += 1
+        count += 1
+        print(str(count) + "       ", end="\r")
+
+with open("vectorsX.csv", "wb") as file:
     np.savetxt(file, x.reshape(x.shape[0], x.shape[1] * x.shape[2]), delimiter=",")
 
-with open("vectorsYDefault.csv", "wb") as file:
+with open("vectorsY.csv", "wb") as file:
     np.savetxt(file, y, delimiter=",")
 
 # with open("vectorsZ.csv", "wb") as file:
