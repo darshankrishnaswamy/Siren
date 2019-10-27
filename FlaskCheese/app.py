@@ -40,7 +40,7 @@ def spectrogram():
         audio = np.array(json.loads(request.data))
         sampleRate = 44100
         if audio.shape[0] != 220500:
-            return jsonify(result=-1, status=1)
+            return str(int(-1))
             # audio = np.zeros(220500)
         spectrogram, frequencies, times = mlab.specgram(audio, NFFT=4096, Fs=sampleRate,
                                                         window=mlab.window_hanning,
@@ -54,10 +54,10 @@ def spectrogram():
 
         print(result)
 
-        return jsonify(result=int(result), status=0)
+        return str(int(result))
     except Exception as e:
         print(e)
-        return jsonify(result=-1, status=1)
+        return str(-1)
 
 
 app.run(host="0.0.0.0", port=5000, debug=True, threaded=False)
