@@ -53,7 +53,7 @@ def train():
     exec(open("train.py").read())
 
 
-files = 5
+files = 2
 
 images = np.zeros((0, 513, 27))
 vectors = np.zeros(0)

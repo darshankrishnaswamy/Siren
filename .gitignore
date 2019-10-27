@@ -3,3 +3,4 @@ ESC/*
 .idea
 *.csv
 models/testModel.*
+models/*
