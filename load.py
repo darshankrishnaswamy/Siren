@@ -59,6 +59,7 @@ images = np.zeros((0, 513, 27))
 vectors = np.zeros(0)
 
 for i in range(files+1):
+    print(i, end="\r")
     with open("./data/vectorsX"+str(i)+".csv", "rb") as file:
         imagesTemp = np.loadtxt(file, delimiter=',')
         images = np.append(images, imagesTemp.reshape((imagesTemp.shape[0], 513, 27)), axis=0)
