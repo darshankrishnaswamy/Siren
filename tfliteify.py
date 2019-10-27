@@ -1,3 +1,4 @@
+import code
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
@@ -10,8 +11,6 @@ tflite_model = converter.convert()
 
 with open("./models/" + str(name) + ".tflite", "wb") as file:
     file.write(tflite_model)
-
-import code
 
 variables = globals().copy()
 variables.update(locals())

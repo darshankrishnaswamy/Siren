@@ -16,9 +16,9 @@ def pad(arr):
     return np.repeat(arr, (math.ceil(1723 / arr.shape[1])), axis=1)[:, 0:1723]
 
 
-file = open("./ECS/esc50.csv");
+file = open("./ECS/esc50.csv")
 data = csv.reader(file, delimiter=",")
-next(data);
+next(data)
 
 x = np.zeros((0, 513, 27))
 usefulClasses = [0, 1, 2, 3, 5, 6, 12, 19, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]
@@ -38,10 +38,13 @@ fileCount = 0;
 
 for row in data:
     audio, sampleRate = librosa.load(directory / row[0], sr=44100)
+    print(audio.shape)
 
     spectrogram, freqs, times = mlab.specgram(audio, NFFT=4096, Fs=sampleRate,
                                               window=mlab.window_hanning,
                                               noverlap=4096 // 2)
+    print(spectrogram.shape)
+    break
     spectrogram = spectrogram[::4, ::4]
     spectrogram = spectrogram.reshape((1, 513, 27))
 
