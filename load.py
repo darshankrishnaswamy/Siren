@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-#sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
+# sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 
 import os
 import numpy as np
@@ -53,12 +53,18 @@ def train():
     exec(open("train.py").read())
 
 
-with open("vectorsXDefault.csv", "rb") as file:
-    images = np.loadtxt(file, delimiter=',')
-    images = images.reshape((images.shape[0], 20, 431))
+files = 5
 
-with open("vectorsYDefault.csv", "rb") as file:
-    vectors = np.loadtxt(file, delimiter=',')
+images = np.zeros((0, 513, 27))
+vectors = np.zeros(0)
+
+for i in range(files+1):
+    with open("./data/vectorsX"+str(i)+".csv", "rb") as file:
+        imagesTemp = np.loadtxt(file, delimiter=',')
+        images = np.append(images, imagesTemp.reshape((imagesTemp.shape[0], 513, 27)), axis=0)
+
+    with open("./data/vectorsY"+str(i)+".csv", "rb") as file:
+        vectors = np.append(vectors, np.loadtxt(file, delimiter=','))
 
 combined = np.c_[images.reshape(len(images), -1), vectors.reshape(len(vectors), -1)]
 
