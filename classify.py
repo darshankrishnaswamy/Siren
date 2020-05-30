@@ -1,14 +1,15 @@
 import tensorflow as tf
 
-config = tf.ConfigProto(log_device_placement=True)
-config.gpu_options.allow_growth = True
-sess = tf.Session(config=config)
 from keras.models import load_model
 # from tensorflow.keras.models import load_model
 import matplotlib.mlab as mlab
 import librosa
 
 import numpy as np
+
+config = tf.ConfigProto(log_device_placement=True)
+config.gpu_options.allow_growth = True
+sess = tf.Session(config=config)
 
 model = load_model("./models/model3.hdf5", compile=False)
 model._make_predict_function()
